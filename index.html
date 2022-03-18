@@ -136,7 +136,7 @@
                     for (let p1 of group) {
                         for (let p2 of group) {
                             if (p1 !== p2) {
-                                score += matrix[p1][p2]
+                                score += matrix[p1]?.[p2]
                             }
                         }
                     }
