@@ -37,18 +37,25 @@
             return array;
         }
 
-        function minimizeScore(matrix, groupSize = 4, maxTries = 30000) {
+        function minimizeScore(matrix, groupSize = 4, maxTries = 42000) {
             const names = Object.keys(matrix);
             const count = names.length;
-            // FIXME flexible group size (e.g. "3 to 5")
             const candidates = []
+
+            const groupCount = Math.ceil(count / groupSize);
+            const actualGroupSizes = Array(groupCount).fill(groupSize)
+            const excess = groupCount * groupSize - count
+            for (let i = 1; i <= excess; i++) {
+                actualGroupSizes[groupCount - i]--;
+            }
+
             for (let i = 1; i <= maxTries; i++) {
                 const people = [...names]
                 shuffle(people);
                 let score = 0
                 const groups = []
-                for (let j = 0; j < count; j += groupSize) {
-                    const group = people.slice(j, j + groupSize)
+                for (let j = 0; j < count; j += actualGroupSizes[groups.length]) {
+                    const group = people.slice(j, j + actualGroupSizes[groups.length])
                     groups.push(group)
                     for (let p1 of group) {
                         for (let p2 of group) {
@@ -141,7 +148,8 @@ Fiona,4,4,3,0,0,\,2,1,3,4,5,0,0,3,1,4
 
 <div id="credits">
     Photo by
-    <a href="https://unsplash.com/@randyfath?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Randy Fath</a>
+    <a href="https://unsplash.com/@randyfath?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Randy
+        Fath</a>
     on
     <a href="https://unsplash.com/s/photos/teamwork?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 </div>
